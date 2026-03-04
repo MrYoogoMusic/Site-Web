@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: ${NGINX_IMAGE}
+    container_name: rockzone-nginx-staging
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - rockzone-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  frontend:
+    image: ${FRONTEND_IMAGE}
+    container_name: rockzone-frontend-staging
+    restart: unless-stopped
+    expose:
+      - "80"
+    networks:
+      - rockzone-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  backend:
+    image: ${BACKEND_IMAGE}
+    container_name: rockzone-backend-staging
+    restart: unless-stopped
+    expose:
+      - "8001"
+    environment:
+      MONGO_URL: ${MONGO_URL}
+      DB_NAME: ${DB_NAME}
+    networks:
+      - rockzone-network
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8001/api/', timeout=2)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  mongodb:
+    image: mongo:7
+    container_name: rockzone-mongodb-staging
+    restart: unless-stopped
+    expose:
+      - "27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DB_NAME}
+    volumes:
+      - mongodb-data-staging:/data/db
+      - mongodb-config-staging:/data/configdb
+    networks:
+      - rockzone-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+networks:
+  rockzone-network:
+    driver: bridge
+
+volumes:
+  mongodb-data-staging:
+    driver: local
+  mongodb-config-staging:
+    driver: local
