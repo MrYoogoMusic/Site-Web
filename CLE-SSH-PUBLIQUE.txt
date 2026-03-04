@@ -1,0 +1,30 @@
+╔══════════════════════════════════════════════════════════╗
+║  CLÉ SSH PUBLIQUE À COPIER SUR VOS SERVEURS              ║
+╚══════════════════════════════════════════════════════════╝
+
+Copiez cette clé sur vos serveurs staging ET production :
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFelvLe12xj1ZHjYO1AxmvtF9PmdKfPL48cuTYK7LNC0 deploy@rockzone-auto
+
+╔══════════════════════════════════════════════════════════╗
+║  COMMANDES POUR COPIER LA CLÉ                           ║
+╚══════════════════════════════════════════════════════════╝
+
+Sur STAGING (staging.hugodurieux.fr) :
+───────────────────────────────────────────────────────────
+ssh mryoogomusic@staging.hugodurieux.fr
+mkdir -p ~/.ssh
+echo "COLLEZ_LA_CLÉ_CI-DESSUS" >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+exit
+
+Sur PRODUCTION (mryoogomusic.fr) :
+───────────────────────────────────────────────────────────
+ssh mryoogomusic@mryoogomusic.fr
+mkdir -p ~/.ssh
+echo "COLLEZ_LA_CLÉ_CI-DESSUS" >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+exit
+
+✅ Une fois fait, le déploiement automatique fonctionnera !
+
