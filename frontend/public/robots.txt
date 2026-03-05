@@ -1,0 +1,9 @@
+# robots.txt for RockZone
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://mryoogomusic.fr/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

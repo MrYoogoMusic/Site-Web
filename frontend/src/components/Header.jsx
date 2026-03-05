@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X, Music2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -18,7 +18,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
+          <Link href="/" className="flex items-center space-x-2 group">
             <Music2 className="w-8 h-8 text-red-600 group-hover:text-red-500 transition-colors" />
             <span className="text-xl font-bold text-white group-hover:text-red-500 transition-colors">
               RockZone
